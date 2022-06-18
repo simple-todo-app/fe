@@ -1,26 +1,23 @@
-import React, { useState } from 'react';
-import './App.css';
+import React from 'react';
 import { Link } from 'react-router-dom';
 
-function App() {
-  const [tasks, setTasks] useState([]);
+const Register = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
   }
 
-
   return (
-    <div className="App">
+    <div>
       <form className='auth-form' onSubmit={handleSubmit}>
-        <h1>Sign In</h1>
+        <h1>Register</h1>
         <input className='auth-input' type='email' placeholder='Email Address' />
         <input className='auth-input' type='password' placeholder='Password' />
-        <button className='auth-btn'>Sign In</button>
-        <p>New here? <u><Link to='/register'>Create an account.</Link></u></p>
+        <button className='auth-btn'>Register</button>
+        <p>Been here before? <u><Link to='/'>Sign In.</Link></u></p>
       </form>
     </div>
-  );
+  )
 }
 
-export default App;
+export default Register;
