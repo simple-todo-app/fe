@@ -36,7 +36,7 @@ function App() {
   return (
     <div className="App">{ userID ? 
       tasks.map(task => {
-        return <div>{task.title}</div>
+        return <div style={ task.completed ? {textDecoration: 'underline'} : {}}>{task.title}</div>
       }).sort() :
       <form className='auth-form' onSubmit={handleSubmit}>
         <h1>Sign In</h1>
