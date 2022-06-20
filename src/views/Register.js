@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import axios from 'axios';
 import { Link } from 'react-router-dom';
 
 const Register = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    // axios.post('')
   }
-
+  
   return (
     <div>
       <form className='auth-form' onSubmit={handleSubmit}>
