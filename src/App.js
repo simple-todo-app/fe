@@ -6,13 +6,17 @@ import { Link } from 'react-router-dom';
 function App() {
     const [credentials, setCredentials] = useState({ email: '', password: '' });
     const [tasks, setTasks] = useState([]);
+    const [error, setError] = useState('');
     const userID = localStorage.getItem('id');
 
     const handleChange = (e) => setCredentials({ ...credentials, [e.target.name]: e.target.value });
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        axios
+        if (!credentials.email || !credentials.password) {
+          setError('Please enter both fields')
+        } else {
+          axios
             .post('http://localhost:9000/auth/signin', credentials)
             .then((res) => {
                 localStorage.setItem('id', res.data.id);
@@ -21,6 +25,8 @@ function App() {
             .catch((err) => {
                 console.log(err);
             });
+        }
+        
     };
 
     useEffect(() => {
@@ -51,15 +57,11 @@ function App() {
             ) : (
                 <form className='auth-form' onSubmit={handleSubmit}>
                     <h1>Sign In</h1>
+                    {error && <p>{error}</p>}
                     <input className='auth-input' type='email' value={credentials.email} name='email' onChange={handleChange} placeholder='Email Address' />
                     <input className='auth-input' type='password' value={credentials.password} name='password' onChange={handleChange} placeholder='Password' />
                     <button className='auth-btn'>Sign In</button>
-                    <p>
-                        New here?{' '}
-                        <u>
-                            <Link to='/register'>Create an account.</Link>
-                        </u>
-                    </p>
+                    <p>New here? <u><Link to='/register'>Create an account.</Link></u></p>
                 </form>
             )}
         </div>
