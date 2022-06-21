@@ -5,11 +5,38 @@ import { Link } from 'react-router-dom';
 
 function App() {
     const [credentials, setCredentials] = useState({ email: '', password: '' });
+    const [newTodo, setNewTodo] = useState('')
     const [tasks, setTasks] = useState([]);
     const [error, setError] = useState('');
     const userID = localStorage.getItem('id');
 
-    const handleChange = (e) => setCredentials({ ...credentials, [e.target.name]: e.target.value });
+    const getTasks = () => {
+      axios
+            .get(`http://localhost:9000/tasks/${userID}`)
+            .then((res) => {
+                setTasks(res.data);
+            })
+            .catch((err) => {
+                console.error(err);
+            });
+    }
+
+    const handleChanges = (e) => setCredentials({ ...credentials, [e.target.name]: e.target.value });
+    const handleNewTodo = (e) => setNewTodo(e.target.value)
+  
+    const handleAddTodo = (e) => {
+      e.preventDefault();
+      if (!newTodo) {
+        console.log('please add a title')
+      } else {
+        axios
+          .post('http://localhost:9000/tasks', { title: newTodo, user_id: userID })
+          .then(() => {
+              getTasks()
+              setNewTodo('')
+          }).catch(err => console.log(err))
+      }
+    }
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -30,24 +57,21 @@ function App() {
     };
 
     useEffect(() => {
-        console.log('hey');
-        axios
-            .get(`http://localhost:9000/tasks/${userID}`)
-            .then((res) => {
-                setTasks(res.data);
-            })
-            .catch((err) => {
-                console.error(err);
-            });
+      getTasks()
     }, [userID]);
 
     return (
         <div className='App'>
             {userID ? (
                 <div>
-                    {tasks.map((task) => {
+                  <h1>To do</h1>
+                  <form onSubmit={handleAddTodo}>
+                    <input className='auth-input' type='text' placeholder='Enter task' value={newTodo} onChange={handleNewTodo} />
+                    <button className='auth-btn'>Add</button>
+                  </form>
+                    {tasks.map((task, index) => {
                         return (
-                            <div className='task-item' style={task.completed ? { textDecoration: 'underline' } : {}}>
+                            <div key={index} className='task-item' style={task.completed ? { textDecoration: 'underline' } : {}}>
                                 {task.title}
                                 <input style={{ marginLeft: '20px' }} type='checkbox' />
                             </div>
@@ -58,8 +82,8 @@ function App() {
                 <form className='auth-form' onSubmit={handleSubmit}>
                     <h1>Sign In</h1>
                     {error && <p>{error}</p>}
-                    <input className='auth-input' type='email' value={credentials.email} name='email' onChange={handleChange} placeholder='Email Address' />
-                    <input className='auth-input' type='password' value={credentials.password} name='password' onChange={handleChange} placeholder='Password' />
+                    <input className='auth-input' type='email' value={credentials.email} name='email' onChange={handleChanges} placeholder='Email Address' />
+                    <input className='auth-input' type='password' value={credentials.password} name='password' onChange={handleChanges} placeholder='Password' />
                     <button className='auth-btn'>Sign In</button>
                     <p>New here? <u><Link to='/register'>Create an account.</Link></u></p>
                 </form>
