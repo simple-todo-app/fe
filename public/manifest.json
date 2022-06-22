@@ -1,9 +1,9 @@
 {
-  "short_name": "Todo App",
-  "name": "Simple todo app by Dylan Baker",
+  "short_name": "Task App",
+  "name": "Simple task app by Dylan Baker",
   "icons": [],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#000000",
+  "theme_color": "#FFB703",
   "background_color": "#ffffff"
 }

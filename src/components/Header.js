@@ -12,7 +12,7 @@ const Header = () => {
 
   return (
     <header>
-      <div>Simple Todo App</div>
+      <div>Simple Task App</div>
       {userID && <div className='logout-btn' onClick={handleLogout}>Logout</div>}
       
     </header>

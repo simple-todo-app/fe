@@ -65,6 +65,26 @@ function App() {
         })
     }
 
+    const handleCompleted = (task_id, completed) => {
+      if (completed === 1) {
+        axios.put(`http://localhost:9000/tasks/${task_id}`, { completed: 0 } )
+        .then(() => {
+          getTasks()
+        }).catch(err => {
+          console.log(err)
+        })
+      } else {
+        axios.put(`http://localhost:9000/tasks/${task_id}`, { completed: 1 } )
+        .then(() => {
+          getTasks()
+        }).catch(err => {
+          console.log(err)
+        })
+      }
+      
+        
+    }
+
     useEffect(() => {
       getTasks()
     }, [userID]);
@@ -74,17 +94,32 @@ function App() {
           <Header />
             {userID ? (
                 <div className='wrapper'>
-                  <h1>To do</h1>
+                  <h1>Tasks</h1>
                   <form className='task-form' onSubmit={handleAddTodo}>
-                    <input className='task-input' type='text' placeholder='Enter task' value={newTodo} onChange={handleNewTodo} />
+                    <input className='task-input' type='text' placeholder='New task' value={newTodo} onChange={handleNewTodo} />
                     <button className='task-btn'>Add</button>
                     
                   </form>
-                    {tasks.map((task, index) => {
+                  <h2 style={{textAlign: 'left'}}>To Do</h2>
+                    {tasks.filter(task => !task.completed).map((task, index) => {
                         return (
                             <div key={index} className='task-item' >
                               <div className='task-text-wrapper'>
-                              <input style={{ marginRight: '20px' }} type='checkbox' />
+                              <input style={{ marginRight: '20px' }} type='checkbox' checked={task.completed} onChange={() => handleCompleted(task.task_id, task.completed)} />
+                                <div className={task.completed ? 'completed' : ''}>
+                                  {task.title}
+                                </div>
+                                </div>
+                                <button onClick={() => handleDelete(task.task_id)}>Delete</button>
+                            </div>
+                        );
+                    })}
+                    <h2 style={{textAlign: 'left'}}>Completed</h2>
+                    {tasks.filter(task => task.completed).map((task, index) => {
+                        return (
+                            <div key={index} className='task-item' >
+                              <div className='task-text-wrapper'>
+                              <input style={{ marginRight: '20px' }} type='checkbox' checked={task.completed} onChange={() => handleCompleted(task.task_id, task.completed)} />
                                 <div className={task.completed ? 'completed' : ''}>
                                   {task.title}
                                 </div>
