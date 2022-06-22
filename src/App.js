@@ -28,9 +28,7 @@ function App() {
   
     const handleAddTodo = (e) => {
       e.preventDefault();
-      if (!newTodo) {
-        setError('Please enter a task')
-      } else {
+      if (newTodo) {
         axios
           .post('http://localhost:9000/tasks', { title: newTodo, user_id: userID })
           .then(() => {
@@ -55,9 +53,17 @@ function App() {
             .catch((err) => {
                 console.log(err);
             });
-        }
-        
+        }  
     };
+
+    const handleDelete = (task_id) => {
+      axios.delete(`http://localhost:9000/tasks/${task_id}`)
+        .then(() => {
+          getTasks()
+        }).catch(err => {
+          console.log(err)
+        })
+    }
 
     useEffect(() => {
       getTasks()
@@ -69,10 +75,10 @@ function App() {
             {userID ? (
                 <div className='wrapper'>
                   <h1>To do</h1>
-                  <form onSubmit={handleAddTodo}>
-                    <input className='auth-input' type='text' placeholder='Enter task' value={newTodo} onChange={handleNewTodo} />
-                    <button className='auth-btn'>Add</button>
-                    {error && <p>{error}</p>}
+                  <form className='task-form' onSubmit={handleAddTodo}>
+                    <input className='task-input' type='text' placeholder='Enter task' value={newTodo} onChange={handleNewTodo} />
+                    <button className='task-btn'>Add</button>
+                    
                   </form>
                     {tasks.map((task, index) => {
                         return (
@@ -83,7 +89,7 @@ function App() {
                                   {task.title}
                                 </div>
                                 </div>
-                                <button>Delete</button>
+                                <button onClick={() => handleDelete(task.task_id)}>Delete</button>
                             </div>
                         );
                     })}
