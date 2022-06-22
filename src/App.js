@@ -3,6 +3,8 @@ import axios from 'axios';
 import './App.css';
 import { Link } from 'react-router-dom';
 
+import Header from './components/Header';
+
 function App() {
     const [credentials, setCredentials] = useState({ email: '', password: '' });
     const [newTodo, setNewTodo] = useState('')
@@ -27,13 +29,14 @@ function App() {
     const handleAddTodo = (e) => {
       e.preventDefault();
       if (!newTodo) {
-        console.log('please add a title')
+        setError('Please enter a task')
       } else {
         axios
           .post('http://localhost:9000/tasks', { title: newTodo, user_id: userID })
           .then(() => {
               getTasks()
               setNewTodo('')
+              setError('')
           }).catch(err => console.log(err))
       }
     }
@@ -62,18 +65,25 @@ function App() {
 
     return (
         <div className='App'>
+          <Header />
             {userID ? (
-                <div>
+                <div className='wrapper'>
                   <h1>To do</h1>
                   <form onSubmit={handleAddTodo}>
                     <input className='auth-input' type='text' placeholder='Enter task' value={newTodo} onChange={handleNewTodo} />
                     <button className='auth-btn'>Add</button>
+                    {error && <p>{error}</p>}
                   </form>
                     {tasks.map((task, index) => {
                         return (
-                            <div key={index} className='task-item' style={task.completed ? { textDecoration: 'underline' } : {}}>
-                                {task.title}
-                                <input style={{ marginLeft: '20px' }} type='checkbox' />
+                            <div key={index} className='task-item' >
+                              <div className='task-text-wrapper'>
+                              <input style={{ marginRight: '20px' }} type='checkbox' />
+                                <div className={task.completed ? 'completed' : ''}>
+                                  {task.title}
+                                </div>
+                                </div>
+                                <button>Delete</button>
                             </div>
                         );
                     })}

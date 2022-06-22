@@ -6,20 +6,55 @@
   justify-content: center;
 }
 
+.wrapper {
+  width: 96%;
+  max-width: 1200px;
+}
+
 .task-item {
-  width: auto;
+  width: 100%;
+  max-width: 1200px;
   padding: 10px;
-  margin: 10px;
+  margin: 10px 0;
   text-align: left;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ccc;
+  overflow-wrap: break-word;
+}
+
+.task-item:last-child {
+  border-bottom: 0px;
+}
+
+.task-item button {
+  color: crimson;
+  outline: none;
+  border: 1px solid crimson;
+  border-radius: 3px;
+  padding: 3px 10px;
+  cursor: pointer;
+  margin-left: 20px;
+}
+
+.task-text-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.completed {
+  text-decoration: line-through;
 }
 
 .auth-form {
   width: 100%;
-  height: 90vh;
+  height: 80vh;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  /* background-color: red; */
 }
 
 .auth-input {

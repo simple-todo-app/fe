@@ -1,0 +1,17 @@
+header {
+  width: 96%;
+  max-width: 1500px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 0;
+  user-select: none;
+}
+
+.logout-btn {
+  cursor: pointer;
+}
+
+.logout-btn:hover {
+  text-decoration: underline;
+}
