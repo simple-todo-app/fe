@@ -2,6 +2,8 @@ import React, { useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
+import Header from '../components/Header';
+
 const Register = () => {
 
   const handleSubmit = (e) => {
@@ -10,7 +12,8 @@ const Register = () => {
   }
   
   return (
-    <div>
+    <div className='App'>
+      <Header />
       <form className='auth-form' onSubmit={handleSubmit}>
         <h1>Register</h1>
         <input className='auth-input' type='email' placeholder='Email Address' />

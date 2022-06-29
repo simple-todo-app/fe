@@ -12,7 +12,7 @@ const Header = () => {
 
   return (
     <header>
-      <div>Simple Task App</div>
+      <div><strong>Simple Task App</strong></div>
       {userID && <div className='logout-btn' onClick={handleLogout}>Logout</div>}
       
     </header>
