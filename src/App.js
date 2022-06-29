@@ -104,7 +104,7 @@ function App() {
                         <input className='task-input' type='text' placeholder='New task' value={newTodo} onChange={handleNewTodo} />
                         <button className='task-btn'>Add</button>
                     </form>
-                    <div className='tasks-header' style={tasks.filter((task) => !task.completed).length > 0 ? { display: 'flex' } : { display: 'none' }}>
+                    <div className='tasks-header'>
                         <div className='tasks-header-left'>To Do</div>
                         <div className='tasks-header-right'>
                             {tasks.filter((task) => !task.completed).length}
