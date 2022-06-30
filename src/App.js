@@ -16,11 +16,15 @@ function App() {
     let email = null;
 
     const token = localStorage.getItem('token');
-    const decode = jwt_decode(token);
 
-    if (id === null && token) {
-        email = decode.email;
-        id = decode.id;
+
+    if (id === null) {
+        if (token) {
+            const decode = jwt_decode(token);
+            email = decode.email;
+            id = decode.id;
+        }
+        
     }
 
     const getTasks = () => {
