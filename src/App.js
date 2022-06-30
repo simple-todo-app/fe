@@ -14,7 +14,7 @@ function App() {
 
     const getTasks = () => {
         axios
-            .get(`http://localhost:9000/tasks/${userID}`)
+            .get(`https://dylan-todo-app-be.herokuapp.com/tasks/${userID}`, { headers: { Authorization: localStorage.getItem('token') } })
             .then((res) => {
                 setTasks(res.data);
             })
@@ -23,43 +23,47 @@ function App() {
             });
     };
 
-    const handleChanges = (e) => setCredentials({ ...credentials, [e.target.name]: e.target.value }) && console.log(credentials);
+    const handleChanges = (e) => {
+      setCredentials({ ...credentials, [e.target.name]: e.target.value })
+      setError('')
+    };
+    
     const handleNewTodo = (e) => setNewTodo(e.target.value);
 
     const handleAddTodo = (e) => {
         e.preventDefault();
         if (newTodo) {
             axios
-                .post('http://localhost:9000/tasks', { title: newTodo, user_id: userID })
+                .post('https://dylan-todo-app-be.herokuapp.com/tasks', { title: newTodo, user_id: userID }, { headers: { Authorization: localStorage.getItem('token') } })
                 .then(() => {
                     getTasks();
                     setNewTodo('');
-                    setError('');
                 })
                 .catch((err) => console.log(err));
         }
     };
 
-    const handleSubmit = (e) => {
+    const handleSignin = (e) => {
         e.preventDefault();
         if (!credentials.email || !credentials.password) {
             setError('Please enter both fields');
         } else {
             axios
-                .post('http://localhost:9000/auth/signin', credentials)
+                .post('https://dylan-todo-app-be.herokuapp.com/auth/signin', credentials)
                 .then((res) => {
                     localStorage.setItem('id', res.data.id);
+                    localStorage.setItem('token', res.data.token);
                     window.location.reload(true);
                 })
                 .catch((err) => {
-                    console.log(err);
+                    setError(err.response.data.message);
                 });
         }
     };
 
     const handleDelete = (task_id) => {
         axios
-            .delete(`http://localhost:9000/tasks/${task_id}`)
+            .delete(`https://dylan-todo-app-be.herokuapp.com/tasks/${task_id}`, { headers: { Authorization: localStorage.getItem('token') } })
             .then(() => {
                 getTasks();
             })
@@ -69,25 +73,13 @@ function App() {
     };
 
     const handleCompleted = (task_id, completed) => {
-        if (completed === 1) {
-            axios
-                .put(`http://localhost:9000/tasks/${task_id}`, { completed: 0 })
-                .then(() => {
-                    getTasks();
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
-        } else {
-            axios
-                .put(`http://localhost:9000/tasks/${task_id}`, { completed: 1 })
-                .then(() => {
-                    getTasks();
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
-        }
+        axios.put(`https://dylan-todo-app-be.herokuapp.com/tasks/${task_id}`, { completed: !completed })
+             .then(() => {
+                 getTasks();
+             })
+             .catch((err) => {
+                 console.log(err);
+             });
     };
 
     useEffect(() => {
@@ -146,7 +138,7 @@ function App() {
                         })}
                 </div>
             ) : (
-                <form className='auth-form' onSubmit={handleSubmit}>
+                <form className='auth-form' onSubmit={handleSignin}>
                     <h1>Sign In</h1>
                     {error && <p>{error}</p>}
                     <input className='auth-input' type='email' value={credentials.email} name='email' onChange={handleChanges} placeholder='Email Address' />

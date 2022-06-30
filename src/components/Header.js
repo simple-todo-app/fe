@@ -7,6 +7,7 @@ const Header = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('id');
+    localStorage.removeItem('token');
     window.location.reload(true);
   };
 
