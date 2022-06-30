@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Link , useNavigate} from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import Header from '../components/Header';
 
 const Register = () => {
     const [credentials, setCredentials] = useState({ email: '', password: '' });
     const [error, setError] = useState('');
-    const userID = localStorage.getItem('id');
 
     let navigateTo = useNavigate();
 
@@ -21,22 +20,20 @@ const Register = () => {
         if (!credentials.email) {
             setError('Please enter your email address');
         } else if (!credentials.password) {
-          setError('Please enter a password');
-      } else {
+            setError('Please enter a password');
+        } else {
             axios
                 .post('https://dylan-todo-app-be.herokuapp.com/auth/register', credentials)
                 .then(() => {
-                  axios
-                  .post('https://dylan-todo-app-be.herokuapp.com/auth/signin', credentials)
-                  .then((res) => {
-                    console.log(res)
-                      localStorage.setItem('id', res.data.id);
-                      localStorage.setItem('token', res.data.token);
-                      navigateTo('../');
-                  })
-                  .catch((err) => {
-                      setError(err.response.data.message);
-                  });
+                    axios
+                        .post('https://dylan-todo-app-be.herokuapp.com/auth/signin', credentials)
+                        .then((res) => {
+                            localStorage.setItem('token', res.data.token);
+                            navigateTo('../');
+                        })
+                        .catch((err) => {
+                            setError(err.response.data.message);
+                        });
                 })
                 .catch((err) => {
                     setError(err.response.data.message);

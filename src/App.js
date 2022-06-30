@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import jwt_decode from 'jwt-decode';
 import './App.css';
 import { Link } from 'react-router-dom';
 
@@ -10,17 +11,29 @@ function App() {
     const [newTodo, setNewTodo] = useState('');
     const [tasks, setTasks] = useState([]);
     const [error, setError] = useState('');
-    const userID = localStorage.getItem('id');
+    
+    let id = null;
+    let email = null;
+
+    const token = localStorage.getItem('token');
+    const decode = jwt_decode(token);
+
+    if (id === null && token) {
+        email = decode.email;
+        id = decode.id;
+    }
 
     const getTasks = () => {
-        axios
-            .get(`https://dylan-todo-app-be.herokuapp.com/tasks/${userID}`, { headers: { Authorization: localStorage.getItem('token') } })
+        if (id !== null) {
+            axios
+            .get(`https://dylan-todo-app-be.herokuapp.com/tasks/${id}`, { headers: { Authorization: token } })
             .then((res) => {
                 setTasks(res.data);
             })
             .catch((err) => {
                 console.error(err);
             });
+        }  
     };
 
     const handleChanges = (e) => {
@@ -34,7 +47,7 @@ function App() {
         e.preventDefault();
         if (newTodo) {
             axios
-                .post('https://dylan-todo-app-be.herokuapp.com/tasks', { title: newTodo, user_id: userID }, { headers: { Authorization: localStorage.getItem('token') } })
+                .post('https://dylan-todo-app-be.herokuapp.com/tasks', { title: newTodo, user_id: id }, { headers: { Authorization: token } })
                 .then(() => {
                     getTasks();
                     setNewTodo('');
@@ -43,7 +56,7 @@ function App() {
         }
     };
 
-    const handleSignin = (e) => {
+    const handleSignIn = (e) => {
         e.preventDefault();
         if (!credentials.email || !credentials.password) {
             setError('Please enter both fields');
@@ -51,7 +64,6 @@ function App() {
             axios
                 .post('https://dylan-todo-app-be.herokuapp.com/auth/signin', credentials)
                 .then((res) => {
-                    localStorage.setItem('id', res.data.id);
                     localStorage.setItem('token', res.data.token);
                     window.location.reload(true);
                 })
@@ -63,7 +75,7 @@ function App() {
 
     const handleDelete = (task_id) => {
         axios
-            .delete(`https://dylan-todo-app-be.herokuapp.com/tasks/${task_id}`, { headers: { Authorization: localStorage.getItem('token') } })
+            .delete(`https://dylan-todo-app-be.herokuapp.com/tasks/${task_id}`, { headers: { Authorization: token } })
             .then(() => {
                 getTasks();
             })
@@ -84,12 +96,12 @@ function App() {
 
     useEffect(() => {
         getTasks();
-    }, [userID]);
+    }, [id]);
 
     return (
         <div className='App'>
-            <Header />
-            {userID ? (
+            <Header email={email} />
+            {localStorage.getItem('token') ? (
                 <div className='wrapper'>
                     <h1>Tasks</h1>
                     <form className='task-form' onSubmit={handleAddTodo}>
@@ -138,7 +150,7 @@ function App() {
                         })}
                 </div>
             ) : (
-                <form className='auth-form' onSubmit={handleSignin}>
+                <form className='auth-form' onSubmit={handleSignIn}>
                     <h1>Sign In</h1>
                     {error && <p>{error}</p>}
                     <input className='auth-input' type='email' value={credentials.email} name='email' onChange={handleChanges} placeholder='Email Address' />

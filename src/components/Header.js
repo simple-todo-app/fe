@@ -1,20 +1,19 @@
 import React from 'react';
-
 import '../styles/Header.css';
 
-const Header = () => {
-  const userID = localStorage.getItem('id');
+const Header = (props) => {
+  const { email } = props
+  const token = localStorage.getItem('token');
 
   const handleLogout = () => {
-    localStorage.removeItem('id');
     localStorage.removeItem('token');
     window.location.reload(true);
   };
 
   return (
     <header>
-      <div><strong>Simple Task App</strong></div>
-      {userID && <div className='logout-btn' onClick={handleLogout}>Logout</div>}
+      <div><strong>Task App</strong></div>
+      {token && <div className='header-right'><div className='logout-btn' onClick={handleLogout}>Logout</div></div>}
       
     </header>
   )

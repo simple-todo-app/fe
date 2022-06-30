@@ -8,8 +8,13 @@ header {
   user-select: none;
 }
 
+.header-right {
+  display: flex;
+}
+
 .logout-btn {
   cursor: pointer;
+  margin-left: 10px;
 }
 
 .logout-btn:hover {
