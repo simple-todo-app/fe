@@ -8,6 +8,11 @@ header {
   user-select: none;
 }
 
+.header-left {
+  font-size: 30px;
+  font-weight: 700;
+}
+
 .header-right {
   display: flex;
 }

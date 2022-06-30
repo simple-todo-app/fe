@@ -35,6 +35,7 @@
   background-color: #ffb703;
   font-size: 16px;
   user-select: none;
+  color: #000000;
 }
 
 /* Tasks Header */
@@ -95,7 +96,6 @@
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  /* background-color: red; */
 }
 
 .auth-input {
@@ -107,6 +107,7 @@
   border: none;
   outline: none;
   border: 1px solid #ffb703;
+  font-size: 16px;
 }
 
 .auth-btn {
@@ -119,5 +120,34 @@
   outline: none;
   cursor: pointer;
   background-color: #ffb703;
+  color: #000000;
   font-size: 16px;
+}
+
+@media only screen and (max-width: 600px) {
+  body {
+    background-color: lightblue;
+  }
+
+  .auth-input {
+    font-size: 18px;
+  }
+  
+  .auth-btn {
+    font-size: 18px;
+  }
+
+  .task-input {
+    font-size: 18px;
+  }
+  
+  .task-btn {
+    font-size: 18px;
+  }
+
+  .task-item button {
+    background: #eee;
+    padding: 5px 10px;
+    font-size: 16px;
+  }
 }

@@ -12,9 +12,8 @@ const Header = (props) => {
 
   return (
     <header>
-      <div><strong>Task App</strong></div>
+      <div className='header-left'>Task App</div>
       {token && <div className='header-right'><div className='logout-btn' onClick={handleLogout}>Logout</div></div>}
-      
     </header>
   )
 }
